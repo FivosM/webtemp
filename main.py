@@ -1,7 +1,10 @@
-import sys
-import os, os.path, shutil
+import sys, os, os.path, shutil
+import time
 import json
 import re
+
+startTime = time.time()
+startCpuTime = time.process_time()
 
 contentEndsWith = ".webcontent"
 templateEndsWith = ".webtemp"
@@ -66,7 +69,7 @@ def main():
                 print("ERROR: csettings.json parsing error")
     else:
         print('ERROR: csettings.json does not exist')
-    print("Exiting.")
+    print("EXITING\nReal time: {}\nCpu time: {}".format(time.time() - startTime, time.process_time() - startCpuTime))
 
 if __name__ == '__main__':
   main()
