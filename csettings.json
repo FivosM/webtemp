@@ -1,0 +1,7 @@
+{
+  "settings": {
+    "build-directory": "build",
+    "site-directory": "site",
+    "template-directory": "template"
+  }
+}
