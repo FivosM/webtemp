@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webtemp</title>
+    <style>
+      .redcol {
+        color:red;
+      }
+      small {
+        font-size: 0.6em;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <main>
+        <header><h1>Webtemp<small>(late)</small></h1></header>
+        <section>
+          <hr>
+          <p>Here is our content:</p>
+          #####CONTENT#####
+          <hr> 
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
