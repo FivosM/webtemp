@@ -3,6 +3,14 @@ import time
 import json
 import re
 
+try:
+    import htmlmin
+    #minification does not touch your files but the /build directory files
+    minify = True #turn this off to disable minification of code 
+except:
+    minify = False
+
+
 startTime = time.time()
 startCpuTime = time.process_time()
 
@@ -10,7 +18,7 @@ contentEndsWith = ".webcontent"
 templateEndsWith = ".webtemp"
 contentUniqueString = "#####CONTENT#####" #text to replace in *.webtemp files
 templateUniqueString = "#####" #text for identifying template in .webcontent files (eg: #####main#####)
-templateRegex = re.compile(templateUniqueString+'([\S]+)'+templateUniqueString)
+templateRegex = re.compile(templateUniqueString+r'([\S]+)'+templateUniqueString)
 
 verbose = False
 def verbosePrint(s):
@@ -32,6 +40,7 @@ def addTemplate(filepath, templateDir):
                         l = f.read()
                         k = k.replace(contentUniqueString, l)
                         f.seek(0)
+                        if minify: k = htmlmin.minify(k, remove_empty_space=True, keep_pre=True, reduce_boolean_attributes=True)
                         f.write(k)
                     except:
                         print("ERROR cannot read {}".format(templateDir+"/"+template+templateEndsWith))
