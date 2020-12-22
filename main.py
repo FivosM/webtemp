@@ -10,6 +10,12 @@ try:
 except:
     minify = False
 
+try:
+    import markdown
+    md = True
+except:
+    md = False
+
 
 startTime = time.time()
 startCpuTime = time.process_time()
@@ -24,6 +30,30 @@ verbose = False
 def verbosePrint(s):
     if verbose == True:
         print(s)
+
+def markdownAddTemplate(filepath, templateDir):
+    try:
+        f = open(filepath, "r+")
+        if f:
+            w = re.search(templateRegex, f.readline().rstrip())
+            if w:
+                template = w.group(1)
+                if os.path.isfile(templateDir+"/"+template+templateEndsWith):
+                    try:
+                        templatef = open(templateDir+"/"+template+templateEndsWith, "r")
+                        k = templatef.read()
+                        templatef.close()
+                        l = f.read()
+                        k = k.replace(contentUniqueString, markdown.markdown(l))
+                        f.seek(0)
+                        if minify: k = htmlmin.minify(k, remove_empty_space=True, keep_pre=True, reduce_boolean_attributes=True)
+                        f.write(k)
+                    except:
+                        print("ERROR cannot read {}".format(templateDir+"/"+template+templateEndsWith))
+            f.close()
+            os.rename(filepath, filepath[:-len(".md")]+".html")
+    except:
+        print("ERROR opening file: {}".format(filepath))
 
 def addTemplate(filepath, templateDir):
     try:
@@ -56,6 +86,8 @@ def recurseWalk(path, templateDir): #loop recursively through the build director
         for i in files:
             if i.endswith(contentEndsWith):
                 addTemplate(root+"/"+i, templateDir)
+            if i.endswith(".md") and md:
+                markdownAddTemplate(root+"/"+i, templateDir)
 
 def main():
     rootPath = os.getcwd()
